@@ -1,5 +1,3 @@
-
-
 cdef class Token:
     cdef readonly str name
     cdef readonly str address
@@ -20,10 +18,10 @@ cdef class Swap:
 
 cdef class Route:
     cdef public list swaps
-    cdef public long UsdValue
-    cdef public long EP
-    cdef public long index
-    cdef public long capital
+    cdef public float UsdValue
+    cdef public int EP
+    cdef public float index
+    cdef public int capital
 
 
 cdef class Spliter:

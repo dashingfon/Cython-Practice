@@ -39,7 +39,7 @@ routes = []
 
 @timer
 def main():
-    routeDict = {
+    routeDict1 = {
         'swaps': [
             {
                 'fro': {'name': 'WBNB',
@@ -62,13 +62,54 @@ def main():
                         'router': '0x73645363'}
             }
         ],
-        'UsdValue': 1.4,
-        'EP': 343344345353,
-        'index': 45433545,
-        'capital': 47763656345
+        'UsdValue': 0.,
+        'EP': 0,
+        'index': 0.,
+        'capital': 0
     }
-    route = Route.fromDict(routeDict)
-    print(route)
+    routeDict2 = {
+        'swaps': [
+            {
+                'fro': {'name': 'WBNB',
+                        'address': '0x373645636'},
+                'to': {'name': 'ETH',
+                        'address': '0x36262563'}, 
+                'via': {'name': 'crivas',
+                        'pair': '0x37263525363',
+                        'fee': 0.996,
+                        'router': '0x45255536453'}
+            },
+            {
+                'fro': {'name': 'ETH',
+                        'address': '0x36262563'},
+                'to': {'name': 'USDC',
+                        'address': '0x373645636'},
+                'via': {'name': 'servic',
+                        'pair': '0x46354663',
+                        'fee': 0.995,
+                        'router': '0x73645363'}
+            },
+            {
+                'fro': {'name': 'USDC',
+                        'address': '0x36262563'},
+                'to': {'name': 'WBNB',
+                        'address': '0x373645636'},
+                'via': {'name': 'tempos',
+                        'pair': '0x46354663',
+                        'fee': 0.995,
+                        'router': '0x73645363'}
+            }
+        ],
+        'UsdValue': 0.,
+        'EP': 0,
+        'index': 0.,
+        'capital': 0
+    }
+    route = Route.fromDict(routeDict1)
+    route1 = Route.fromDict(routeDict2)
+    route1.UsdValue = 9
+    print(route == route1)
+    print(route1.UsdValue)
 
 if __name__ == '__main__':
     '''_hello('mfon')

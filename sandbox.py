@@ -1,11 +1,10 @@
-class dre:
-    def __init__(self, num):
-        self.num = num
+def gen(num):
+    yield 'starting'
+    for i in range(num):
+        yield i
 
-    def __repr__(self):
-        return f'dre num is ({self.num})'
-r = dre(5)
-print(str(r))
-t = {'r': r}
-print(t)
-print(str(t))
+generator = gen(8)
+e = next(generator)
+print(e)
+for i in generator:
+    print(i)

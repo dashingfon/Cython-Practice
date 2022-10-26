@@ -1,4 +1,4 @@
-# # cython: profile=True
+# cython: profile=True
 
 import typing
 
@@ -10,43 +10,51 @@ cdef class Token:
         self.address = address
 
     def __repr__(self) -> str:
-        return f'Token({self.name})'
+        return f'{self.name}'
 
     def __hash__(self) -> int:
         return hash((self.name, self.address.lower()))
 
     def __eq__(self, Token other) -> bool:
-        return isinstance(other, Token) and self.name == (<Token>other).name and self.address == (<Token>other).addesss
-
-    def __eq__(self, Token other) -> bool:
-        return isinstance(other, Token) and self.name == (<Token>other).name and self.address == (<Token>other).addesss
-
-    def __eq__(self, Token other) -> bool:
-        return isinstance(other, Token) and self.name == (<Token>other).name and self.address == (<Token>other).addesss
-
-    def __eq__(self, Token other) -> bool:
-        return isinstance(other, Token) and self.name == (<Token>other).name and self.address == (<Token>other).addesss
-
-    def __eq__(self, Token other) -> bool:
-        return isinstance(other, Token) and self.name == (<Token>other).name and self.address == (<Token>other).addesss
-
-    def __ge__(self, other) -> bool:
         if not isinstance(other, Token):
             return NotImplemented
-        return self.addesss.lower() >= (<Token>other).address.lower()
+        return self.name == (<Token>other).name and self.address == (<Token>other).addesss
+
+    def __ne__(self, Token other) -> bool:
+        if self.__eq__(other) is NotImplemented:
+            return NotImplemented
+        return not self.__eq__(other)
+
+    def __lt__(self, Token other) -> bool:
+        if not isinstance(other, Token):
+            return NotImplemented
+        return self.addesss.lower() < other.address.lower()
+        
+    def __le__(self, Token other) -> bool:
+        if not isinstance(other, Token):
+            return NotImplemented
+        return self.addesss.lower() <= other.address.lower()
+
+    def __gt__(self, Token other) -> bool:
+        if not isinstance(other, Token):
+            return NotImplemented
+        return self.addesss.lower() > other.address.lower()
+
+    def __ge__(self, Token other) -> bool:
+        if not isinstance(other, Token):
+            return NotImplemented
+        return self.addesss.lower() >= other.address.lower()
 
     @property
     def fullJoin(self) -> str:
         return f'{self.name}_{self.address}'
 
     @classmethod
-    def fromDict(cls, load) -> Token:
-        assert type(load.get('name')) == str
-        assert type(load.get('address')) == str
+    def fromDict(cls, dict load) -> Token:
 
         return cls(
-            load.get('name'),
-            load.get('address')
+            name=load.get('name'),
+            address=load.get('address')
         )
 
     def toDict(self) -> dict:
@@ -54,6 +62,7 @@ cdef class Token:
             'name': self.name,
             'address': self.address
         }
+
 
 cdef class Via:
 
@@ -67,17 +76,13 @@ cdef class Via:
         return f'via({self.name} {self.pair})'
 
     @classmethod
-    def fromDict(cls, load) -> Via:
-        assert type(load.get('name')) == str
-        assert type(load.get('pair')) == str
-        assert type(load.get('fee')) == float
-        assert type(load.get('router')) == str
+    def fromDict(cls, dict load) -> Via:
 
         return cls(
-            load.get('name'),
-            load.get('pair'),
-            load.get('fee'),
-            load.get('router')
+            name=load.get('name'),
+            pair=load.get('pair'),
+            fee=load.get('fee'),
+            router=load.get('router')
         )
 
     def toDict(self) -> dict:
@@ -87,6 +92,7 @@ cdef class Via:
             'fee': self.fee,
             'router': self.router
         }
+
 
 cdef class Swap:
     
@@ -100,14 +106,11 @@ cdef class Swap:
 
     @classmethod
     def fromDict(cls, dict load) -> Swap:
-        assert type(load.get('fro')) == dict
-        assert type(load.get('to')) == dict
-        assert type(load.get('via')) == dict
 
         return cls(
-            Token.fromDict(load.get('fro')),
-            Token.fromDict(load.get('to')),
-            Via.fromDict(load.get('via'))
+            fro=Token.fromDict(load.get('fro')),
+            to=Token.fromDict(load.get('to')),
+            via=Via.fromDict(load.get('via'))
         )
 
     def toDict(self) -> dict:
@@ -121,8 +124,8 @@ cdef class Swap:
 cdef class Route:
     
     def __init__(self, list swaps,
-                 long UsdValue, long EP,
-                 long index, long capital) -> None:
+                 float UsdValue, int EP,
+                 float index, int capital) -> None:
 
         self.swaps = swaps
         self.UsdValue = UsdValue
@@ -149,12 +152,6 @@ cdef class Route:
     @classmethod
     def fromDict(cls, dict load) -> Route:
 
-        assert type(load.get('swaps')) == list
-        assert type(load.get('UsdValue')) == float
-        assert type(load.get('EP')) == long
-        assert type(load.get('index')) == long
-        assert type(load.get('capital')) == long
-
         cdef list swapList = []
         cdef dict s
 
@@ -173,25 +170,34 @@ cdef class Route:
         return f'{self.swaps}'
 
     def __eq__(self, Route other) -> bool:
-        return isinstance(other, Route) and self.swaps == (<Route>other).swaps
-
-    def __eq__(self, Token other) -> bool:
-        return isinstance(other, Route) and self.swaps == (<Route>other).swaps
-
-    def __eq__(self, Token other) -> bool:
-        return isinstance(other, Route) and self.swaps == (<Route>other).swaps
-
-    def __eq__(self, Token other) -> bool:
-        return isinstance(other, Route) and self.swaps == (<Route>other).swaps
-
-    def __eq__(self, Token other) -> bool:
-        return isinstance(other, Route) and self.swaps == (<Route>other).swaps
-
-    def __ge__(self, other) -> bool:
         if not isinstance(other, Route):
             return NotImplemented
-        return self.UsdValue >= (<Route>other).UsdValue
+        return self.swaps == other.swaps
 
+    def __ne__(self, Route other) -> bool:
+        if self.__eq__(other) is NotImplemented:
+            return NotImplemented
+        return not self.__eq__(other)
+
+    def __lt__(self, Route other) -> bool:
+        if not isinstance(other, Route):
+            return NotImplemented
+        return self.UsdValue * self.EP < other.UsdValue * other.EP
+
+    def __le__(self, Route other) -> bool:
+        if not isinstance(other, Route):
+            return NotImplemented
+        return self.UsdValue * self.EP <= other.UsdValue * other.EP
+
+    def __gt__(self, Route other) -> bool:
+        if not isinstance(other, Route):
+            return NotImplemented
+        return self.UsdValue * self.EP > other.UsdValue * other.EP
+        
+    def __ge__(self, Route other) -> bool:
+        if not isinstance(other, Route):
+            return NotImplemented
+        return self.UsdValue * self.EP >= other.UsdValue * other.EP
 
 cdef class Spliter:
 
